@@ -14,7 +14,6 @@ typedef struct {
 Mahasiswa mhs[MAX];
 int jumlah = 0;
 
-// Fungsi untuk load data dari file
 void loadFile() {
     FILE *fp = fopen("file.txt", "r");
     if (fp == NULL) {
@@ -24,32 +23,27 @@ void loadFile() {
 
     char line[200];
     while (fgets(line, sizeof(line), fp)) {
-        line[strcspn(line, "\n")] = 0; // hapus newline
-
-        // parsing: ambil nim (pertama), nilai (terakhir), sisanya = nama
+        line[strcspn(line, "\n")] = 0; 
+ 
         char nim[20];
         int nilai;
         char nama[100];
-
-        // ambil nim dulu
+ 
         sscanf(line, "%s", nim);
-
-        // cari nilai terakhir
+ 
         char *lastSpace = strrchr(line, ' ');
         if (lastSpace == NULL) continue;
         nilai = atoi(lastSpace + 1);
-
-        // ambil nama (antara nim dan nilai)
-        *lastSpace = '\0'; // potong string sebelum nilai
-        char *namaStart = strchr(line, ' '); // posisi setelah nim
+ 
+        *lastSpace = '\0'; 
+        char *namaStart = strchr(line, ' ');  
         if (namaStart) {
-            namaStart++; // geser setelah spasi
+            namaStart++;  
             strcpy(nama, namaStart);
         } else {
             strcpy(nama, "-");
         }
-
-        // simpan ke struct
+ 
         strcpy(mhs[jumlah].nim, nim);
         strcpy(mhs[jumlah].nama, nama);
         mhs[jumlah].nilai = nilai;
@@ -57,8 +51,7 @@ void loadFile() {
     }
     fclose(fp);
 }
-
-// Fungsi untuk save data ke file
+ 
 void saveFile() {
     FILE *fp = fopen("file.txt", "w");
     if (fp == NULL) {
@@ -71,16 +64,18 @@ void saveFile() {
     fclose(fp);
 }
 
-// Tampilkan data
 void tampilkan() {
-    printf("\n%-12s %-20s %-5s\n", "NIM", "Nama", "Nilai");
-    printf("-------------------------------------------------\n");
+    printf("\n         Program Entri Nilai");
+    printf("\n         ===================\n");
+    printf("==============================================\n");
+    printf("| %-12s | %-20s | %-5s |\n", "Nim", "Nama", "Nilai");
+    printf("==============================================\n");
     for (int i = 0; i < jumlah; i++) {
-        printf("%-12s %-20s %-5d\n", mhs[i].nim, mhs[i].nama, mhs[i].nilai);
+        printf("| %-12s | %-20s | %-5d |\n", mhs[i].nim, mhs[i].nama, mhs[i].nilai);
     }
+    printf("==============================================\n");
 }
-
-// Sorting nim ascending
+ 
 void sortNIMAsc() {
     for (int i = 0; i < jumlah - 1; i++) {
         for (int j = i + 1; j < jumlah; j++) {
@@ -94,8 +89,7 @@ void sortNIMAsc() {
     printf("\nData setelah sorting NIM ascending:\n");
     tampilkan();
 }
-
-// Sorting nilai descending
+ 
 void sortNilaiDesc() {
     for (int i = 0; i < jumlah - 1; i++) {
         for (int j = i + 1; j < jumlah; j++) {
@@ -109,8 +103,7 @@ void sortNilaiDesc() {
     printf("\nData setelah sorting Nilai descending:\n");
     tampilkan();
 }
-
-// Validasi NIM (harus angka, 10 digit)
+ 
 int validasiNIM(char nim[]) {
     if (strlen(nim) != 10) return 0;
     for (int i = 0; i < 10; i++) {
@@ -118,19 +111,16 @@ int validasiNIM(char nim[]) {
     }
     return 1;
 }
-
-// Validasi Nama (3 - 20 karakter)
+ 
 int validasiNama(char nama[]) {
     int len = strlen(nama);
     return (len >= 3 && len <= 20);
 }
-
-// Validasi Nilai (0 - 9)
+ 
 int validasiNilai(int nilai) {
     return (nilai >= 0 && nilai <= 9);
 }
-
-// Tambah data
+ 
 void tambahData() {
     Mahasiswa baru;
     printf("\nInput NIM (10 digit angka): ");
@@ -162,16 +152,14 @@ void tambahData() {
 int main() {
     int pilihan;
     loadFile();
-    printf("Data awal dari file:\n");
     tampilkan();
 
     do {
-        printf("\n=== MENU ===\n");
-        printf("1. Sorting NIM Ascending\n");
-        printf("2. Sorting Nilai Descending\n");
-        printf("3. Tambah Data\n");
-        printf("4. Keluar & Save ke File\n");
-        printf("Pilih menu: ");
+        printf("\n1.Sorting nim asc");
+        printf("\n2.Sorting nilai desc");
+        printf("\n3.Tambah data");
+        printf("\n4.Keluar dan Save ke file");
+        printf("\n\nMasukkan Pilihan : ");
         scanf("%d", &pilihan);
 
         switch(pilihan) {
@@ -185,3 +173,4 @@ int main() {
 
     return 0;
 }
+
